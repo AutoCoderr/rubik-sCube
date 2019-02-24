@@ -1,0 +1,332 @@
+<title>Rubik's cube</title>
+<style>
+	/*$size: 150px; // cube length*/
+table, th, td {
+  border: 1px solid black;
+}
+
+.buttons, .buttons td {
+  border: 0px;
+}
+
+.cube {
+  width: 150px;
+  height: 150px;
+  position: relative;
+  perspective: 600px;
+  transform-style: preserve-3d;
+}
+.cube-face {
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  opacity: 0.6;
+}
+
+.red {
+	background: red;
+}
+.orange {
+	background: orange;
+}
+.green {
+	background: green;
+}
+.blue {
+	background: blue;
+}
+.white {
+	background: white;
+}
+.yellow {
+	background: yellow;
+}
+
+.front {
+  transform: rotateY(40deg) rotateY(-17deg) rotateX(-15deg) rotateZ(-10deg) translate3d(0, 0, 75px);
+}
+.back {
+  transform: rotateY(220deg) rotateY(-17deg) rotateX(15deg) rotateZ(10deg) translate3d(0, 0, 75px);
+}
+.left {
+  transform: rotateY(-50deg) rotateY(-17deg) rotateZ(15deg) rotateX(-10deg) translate3d(0, 0, 75px);
+}
+.right {
+  transform: rotateY(130deg) rotateY(-17deg) rotateZ(-15deg) rotateX(10deg) translate3d(0, 0, 75px);
+}
+.top {
+  transform: rotateX(90deg) rotateZ(-23deg) rotateX(-15deg) rotateY(-10deg) translate3d(0, 0, 75px);
+}
+.bottom {
+  transform: rotateX(-90deg) rotateZ(23deg) rotateX(-15deg) rotateY(10deg) translate3d(0, 0, 75px);
+}
+
+
+</style>
+<meta charset="utf-8">
+<center>
+	<h1>Rubik's cube javascript : </h1>
+	<br/>
+	 <div class="cube">
+	    <table id="redFace" cellspacing="0" class="cube-face front" >
+	    	<tr>
+	    		<td id="3-0-0" class="red"></td><td id="3-0-1" class="red"></td><td id="3-0-2" class="red"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="3-1-0" class="red"></td><td id="3-1-1" class="red"></td><td id="3-1-2" class="red"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="3-2-0" class="red"></td><td id="3-2-1" class="red"></td><td id="3-2-2"class="red"></td>		
+	    	</tr>
+	    </table>
+	    <table id="orangeFace" cellspacing="0" class="cube-face back" >
+	    	<tr>
+	    		<td id="4-0-0" class="orange"></td><td id="4-0-1" class="orange"></td><td id="4-0-2" class="orange"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="4-1-0" class="orange"></td><td id="4-1-1" class="orange"></td><td id="4-1-2" class="orange"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="4-2-0" class="orange"></td><td id="4-2-1" class="orange"></td><td id="4-2-2"class="orange"></td>		
+	    	</tr>
+	    </table>
+	     <table id="greenFace" cellspacing="0" class="cube-face left" >
+	    	<tr>
+	    		<td id="1-0-0" class="green"></td><td id="1-0-1" class="green"></td><td id="1-0-2" class="green"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="1-1-0" class="green"></td><td id="1-1-1" class="green"></td><td id="1-1-2" class="green"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="1-2-0" class="green"></td><td id="1-2-1" class="green"></td><td id="1-2-2"class="green"></td>		
+	    	</tr>
+	    </table>
+	    <table id="blueFace" cellspacing="0" class="cube-face right" >
+	    	<tr>
+	    		<td id="2-0-0" class="blue"></td><td id="2-0-1" class="blue"></td><td id="2-0-2" class="blue"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="2-1-0" class="blue"></td><td id="2-1-1" class="blue"></td><td id="2-1-2" class="blue"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="2-2-0" class="blue"></td><td id="2-2-1" class="blue"></td><td id="2-2-2"class="blue"></td>		
+	    	</tr>
+	    </table>
+	    <table id="whiteFace" cellspacing="0" class="cube-face top" >
+	    	<tr>
+	    		<td id="5-0-0" class="white"></td><td id="5-0-1" class="white"></td><td id="5-0-2" class="white"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="5-1-0" class="white"></td><td id="5-1-1" class="white"></td><td id="5-1-2" class="white"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="5-2-0" class="white"></td><td id="5-2-1" class="white"></td><td id="5-2-2"class="white"></td>		
+	    	</tr>
+	    </table>
+	     <table id="yellowFace" cellspacing="0" class="cube-face bottom">
+	    	<tr>
+	    		<td id="6-0-0" class="yellow"></td><td id="6-0-1" class="yellow"></td><td id="6-0-2" class="yellow"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="6-1-0" class="yellow"></td><td id="6-1-1" class="yellow"></td><td id="6-1-2" class="yellow"></td>		
+	    	</tr>
+	    	<tr>
+	    		<td id="6-2-0" class="yellow"></td><td id="6-2-1" class="yellow"></td><td id="6-2-2"class="yellow"></td>		
+	    	</tr>
+	    </table>
+	 </div>
+	 <br/>
+	 <div id="chooseColor"></div>
+	 <br/>
+	 <br/>
+	 <table class="buttons" cellspacing="20">
+	 	<tr>
+	 		<td>
+				<table>
+				 	<tr>
+				 		<td></td>
+				 		<td>
+				 			<button onclick="rotateCube('rotateLeft')">
+				 				<img width="15" height="14" src="imgs/flecheRotateLeft.jpg">
+				 				</img>
+				 			</button>
+				 		</td>
+				 		<td>
+				 			<button onclick="rotateCube('rotateRight')">
+				 				<img width="15" height="14" src="imgs/flecheRotateRight.jpg">
+				 				</img>
+				 			</button>
+				 		</td>
+				 		<td></td>
+				 	</tr>
+				 	<tr>
+				 		<td><input type="button" value="←" onclick="rotateCube('toRight')"></td>
+				 		<td><input type="button" value="→" onclick="rotateCube('toLeft')"></td>
+				 		<td><input type="button" value="↑" onclick="rotateCube('toBottom')"></td>
+				 		<td><input type="button" value="↓" onclick="rotateCube('toTop')"></td>
+				 	</tr>
+				</table>
+			</td>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<button onclick="mouvements('leftToUp')">
+				 				<img width="20" height="20" src="imgs/leftToUp.png">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('middleToUp')">
+				 				<img width="20" height="20" src="imgs/middleToUp.png">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('rightToUp')">
+				 				<img width="20" height="20" src="imgs/rightToUp.png">
+				 				</img>
+				 			</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="mouvements('leftToDown')">
+				 				<img width="20" height="20" src="imgs/leftToDown.png">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('middleToDown')">
+				 				<img width="20" height="20" src="imgs/middleToDown.png">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('rightToDown')">
+				 				<img width="20" height="20" src="imgs/rightToDown.png">
+				 				</img>
+				 			</button>
+						</td>
+					</tr>
+					<tr>
+						<td></td><td style="height: 12px;"></td><td></td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="mouvements('topToLeft')">
+				 				<img width="20" height="20" src="imgs/topToLeft.png">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('topToRight')">
+				 				<img width="20" height="20" src="imgs/topToRight.png">
+				 				</img>
+				 			</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="mouvements('middleToLeft')">
+				 				<img width="20" height="20" src="imgs/middleToLeft.png">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('middleToRight')">
+				 				<img width="20" height="20" src="imgs/middleToRight.png">
+				 				</img>
+				 			</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="mouvements('bottomToLeft')">
+				 				<img width="20" height="20" src="imgs/bottomToLeft.png">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('bottomToRight')">
+				 				<img width="20" height="20" src="imgs/bottomToRight.png">
+				 				</img>
+				 			</button>
+						</td>
+					</tr>
+					<tr>
+						<td></td><td style="height: 12px;"></td><td></td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="mouvements('rotateLeft')">
+				 				<img width="20" height="20" src="imgs/flecheRotateLeft.jpg">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('rotateRight')">
+				 				<img width="20" height="20" src="imgs/flecheRotateRight.jpg">
+				 				</img>
+				 			</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="mouvements('rotateLeftBack')">
+				 				<img width="20" height="20" src="imgs/flecheRotateLeftBack.jpg">
+				 				</img>
+				 			</button>
+						</td>
+						<td>
+							<button onclick="mouvements('rotateRightBack')">
+				 				<img width="20" height="20" src="imgs/flecheRotateRightBack.jpg">
+				 				</img>
+				 			</button>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<br/>
+	Algos : 
+	<select id="algos">
+		<option value="createCroix">Créer la croix</option>
+		<option value="twoFirstLayer">Les deux première lignes</option>
+		<option value="">-</option>
+		<option value="algoAreteToRight">Deplacer arette du bas vers la droite</option>
+		<option value="algoAreteToLeft">Deplacer arette du bas vers la gauche</option>
+		<option value="createCroixFromBarre">Créer la croix à  partir d'une barre</option>
+		<option value="createCroixFromVirgule">Créer la croix à  partir d'une virgule</option>
+		<option value="orienteCroix">Orienter la croix</option>
+		<option value="placeCoins">Placer les coins</option>
+		<option value="orientCoins">Orienter les coins</option>
+		<option value="fun">Pour le fun</option>
+	</select>
+	<br/>
+	<input type="button" value="Executer" onclick="algos()">
+	<br/>
+	<br/>
+	<input type="button" value="Melanger" onclick="melange()">
+</center>
+
+
+
+
+
+
+
+
+
+
+
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+  crossorigin="anonymous"></script>
+<script src="libs/base.js"></script>
+<script src="libs/mouvements.js"></script>
+<script src="libs/createCroix.js"></script>
+<script src="libs/twoFirstLayer.js"></script>
