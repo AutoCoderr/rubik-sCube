@@ -20,7 +20,7 @@ table, th, td {
   width: inherit;
   height: inherit;
   position: absolute;
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .red {
@@ -294,6 +294,10 @@ table, th, td {
 	<select id="algos">
 		<option value="createCroix">Créer la croix</option>
 		<option value="twoFirstLayer">Les deux première lignes</option>
+		<option value="orientLastLayer">Orienter la dernière ligne</option>
+		<option value="permutLastLayer">Permuter la dernière ligne</option>
+		<option value="resolv">Résoudre le rubik's cube</option>
+		<option value="resolvGetCode">Résoudre le rubik's cube (récuperer le code)</option>
 		<option value="">-</option>
 		<option value="algoAreteToRight">Deplacer arette du bas vers la droite</option>
 		<option value="algoAreteToLeft">Deplacer arette du bas vers la gauche</option>
@@ -309,7 +313,17 @@ table, th, td {
 	<br/>
 	<br/>
 	<input type="button" value="Melanger" onclick="melange()">
+	<br/>
+	<br/>
+	Executer : <textarea id="notationToExec" style="width: 500px; height: 200px;"></textarea><input type="button" value="GO" onclick="exec()">
 </center>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 
 
@@ -320,8 +334,15 @@ table, th, td {
 
 
 
-
-
+<script>
+	function exec() {
+		const toExec = $("#notationToExec").val();
+		execAlgoRec(0,convertCode(toExec), () => {
+			alert("Code executé!");
+		});
+		codeSave = "";
+	}
+</script>
 <script
   src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
   integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
@@ -330,3 +351,5 @@ table, th, td {
 <script src="libs/mouvements.js"></script>
 <script src="libs/createCroix.js"></script>
 <script src="libs/twoFirstLayer.js"></script>
+<script src="libs/orientLastLayer.js"></script>
+<script src="libs/permutLastLayer.js"></script>

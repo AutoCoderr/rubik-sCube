@@ -107,19 +107,73 @@ function algos() {
 			execAlgoRec(0,convertCode("D'R DR' D'R DR' D'R DR' D'R DR' D'R DR' D'R DR'"));
 			break;
 		case "createCroix":
+			console.clear();
 			execAlgoRec(0,convertCode("X'"),() => {
 				new CreateCroix().createCroix(() => {
 					execAlgoRec(0,convertCode("X"), () => {
-						alert("Croix créé avec succès!")
+						alert("Croix créé avec succès!");
 					});
 				});
 			})
 			break;
 		case "twoFirstLayer":
+			console.clear();
 			execAlgoRec(0,convertCode("X'"),() => {
 				new TwoFirstLayer().twoFirstLayer(() => {
 					execAlgoRec(0,convertCode("X"), () => {
-						alert("Deux premières lignes créées avec succès!")
+						alert("Deux premières lignes créées avec succès!");
+					});
+				});
+			})
+			break;
+		case "orientLastLayer":
+			console.clear();
+			execAlgoRec(0,convertCode("X'"),() => {
+				new OrientLastLayer().orientLastLayer(() => {
+					execAlgoRec(0,convertCode("X"), () => {
+						alert("Dernière ligne orienté avec succès!");
+					});
+				});
+			})
+			break;
+		case "permutLastLayer":
+			console.clear();
+			execAlgoRec(0,convertCode("X'"),() => {
+				new PermutLastLayer().permutLastLayer(() => {
+					alert("Dernière ligne permuté avec succès!");
+				});
+			})
+			break;
+		case "resolv":
+			console.clear();
+			execAlgoRec(0,convertCode("X'"),() => {
+				new CreateCroix().createCroix(() => {
+					new TwoFirstLayer().twoFirstLayer(() => {
+						new OrientLastLayer().orientLastLayer(() => {
+							new PermutLastLayer().permutLastLayer(() => {
+								alert("Rubik's cube résolu avec succès");
+							});
+						});
+					});
+				});
+			})
+			break;
+		case "resolvGetCode":
+			$("#notationToExec").val("Géneration du code en cours...");
+			console.clear();
+			codeSave = "";
+			DOMEnable = false;
+			execAlgoRec(0,convertCode("X'"),() => {
+				new CreateCroix().createCroix(() => {
+					new TwoFirstLayer().twoFirstLayer(() => {
+						new OrientLastLayer().orientLastLayer(() => {
+							new PermutLastLayer().permutLastLayer(() => {
+								setRubikFromDOM();
+								DOMEnable = true;
+								$("#notationToExec").val(codeSave);
+								alert("Code de la résolution du rubik's cube récupéré");
+							});
+						});
 					});
 				});
 			})
@@ -145,12 +199,12 @@ function execAlgoRec(i,mouvs,callback) {
 }
 
 function mouvements(mouvement) {
-	let newFrontFace = rubik[getColorOfFace($(".front").attr("id"))];
-	let newLeftFace = rubik[getColorOfFace($(".left").attr("id"))];
-	let newRightFace = rubik[getColorOfFace($(".right").attr("id"))];
-	let newTopFace = rubik[getColorOfFace($(".top").attr("id"))];
-	let newBottomFace = rubik[getColorOfFace($(".bottom").attr("id"))];
-	let newBackFace = rubik[getColorOfFace($(".back").attr("id"))];
+	let newFrontFace = rubik[facePos.front];
+	let newLeftFace = rubik[facePos.left];
+	let newRightFace = rubik[facePos.right];
+	let newTopFace = rubik[facePos.top];
+	let newBottomFace = rubik[facePos.bottom];
+	let newBackFace = rubik[facePos.back];
 
 	const oldFrontFace = copyFace(newFrontFace);
 	const oldLeftFace = copyFace(newLeftFace);
@@ -176,7 +230,7 @@ function mouvements(mouvement) {
 			newBottomFace[1][0] = oldBackFace[1][2];
 			newBottomFace[2][0] = oldBackFace[0][2];
 
-			rotateMat(getColorOfFace($(".left").attr("id")),"left");
+			rotateMat(facePos.left,"left");
 
 			displayRubik();
 			break;
@@ -197,7 +251,7 @@ function mouvements(mouvement) {
 			newTopFace[1][0] = oldBackFace[1][2];
 			newTopFace[2][0] = oldBackFace[0][2];
 
-			rotateMat(getColorOfFace($(".left").attr("id")),"right");
+			rotateMat(facePos.left,"right");
 
 			displayRubik();
 			break;
@@ -256,7 +310,7 @@ function mouvements(mouvement) {
 			newBottomFace[1][2] = oldBackFace[1][0];
 			newBottomFace[2][2] = oldBackFace[0][0];
 
-			rotateMat(getColorOfFace($(".right").attr("id")),"right");
+			rotateMat(facePos.right,"right");
 
 			displayRubik();
 			break;
@@ -277,7 +331,7 @@ function mouvements(mouvement) {
 			newTopFace[1][2] = oldBackFace[1][0];
 			newTopFace[2][2] = oldBackFace[0][0];
 
-			rotateMat(getColorOfFace($(".right").attr("id")),"left");
+			rotateMat(facePos.right,"left");
 
 			displayRubik();
 			break;
@@ -298,7 +352,7 @@ function mouvements(mouvement) {
 			newLeftFace[0][1] = oldBackFace[0][1];
 			newLeftFace[0][2] = oldBackFace[0][2];
 
-			rotateMat(getColorOfFace($(".top").attr("id")),"left");
+			rotateMat(facePos.top,"left");
 
 			displayRubik();
 			break;
@@ -319,7 +373,7 @@ function mouvements(mouvement) {
 			newRightFace[0][1] = oldBackFace[0][1];
 			newRightFace[0][2] = oldBackFace[0][2];
 
-			rotateMat(getColorOfFace($(".top").attr("id")),"right");
+			rotateMat(facePos.top,"right");
 
 			displayRubik();
 			break;
@@ -378,7 +432,7 @@ function mouvements(mouvement) {
 			newLeftFace[2][1] = oldBackFace[2][1];
 			newLeftFace[2][2] = oldBackFace[2][2];
 
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"right");
+			rotateMat(facePos.bottom,"right");
 
 			displayRubik();
 			break;
@@ -399,7 +453,7 @@ function mouvements(mouvement) {
 			newRightFace[2][1] = oldBackFace[2][1];
 			newRightFace[2][2] = oldBackFace[2][2];
 
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"left");
+			rotateMat(facePos.bottom,"left");
 
 			displayRubik();
 			break;
@@ -420,7 +474,7 @@ function mouvements(mouvement) {
 			newRightFace[1][0] = oldBottomFace[0][1];
 			newRightFace[2][0] = oldBottomFace[0][0];
 
-			rotateMat(getColorOfFace($(".front").attr("id")),"left");
+			rotateMat(facePos.front,"left");
 
 			displayRubik();
 			break;
@@ -441,7 +495,7 @@ function mouvements(mouvement) {
 			newLeftFace[1][2] = oldBottomFace[0][1];
 			newLeftFace[2][2] = oldBottomFace[0][2];
 
-			rotateMat(getColorOfFace($(".front").attr("id")),"right");
+			rotateMat(facePos.front,"right");
 
 			displayRubik();
 			break;
@@ -462,7 +516,7 @@ function mouvements(mouvement) {
 			newRightFace[1][2] = oldBottomFace[2][1];
 			newRightFace[2][2] = oldBottomFace[2][0];
 
-			rotateMat(getColorOfFace($(".back").attr("id")),"right");
+			rotateMat(facePos.back,"right");
 
 			displayRubik();
 			break;
@@ -483,7 +537,45 @@ function mouvements(mouvement) {
 			newLeftFace[1][0] = oldBottomFace[2][1];
 			newLeftFace[2][0] = oldBottomFace[2][2];
 
-			rotateMat(getColorOfFace($(".back").attr("id")),"left");
+			rotateMat(facePos.back,"left");
+
+			displayRubik();
+			break;
+		case "rotateLeftMiddle":
+			newTopFace[1][0] = oldRightFace[0][1];
+			newTopFace[1][1] = oldRightFace[1][1];
+			newTopFace[1][2] = oldRightFace[2][1];
+
+			newLeftFace[0][1] = oldTopFace[1][2];
+			newLeftFace[1][1] = oldTopFace[1][1];
+			newLeftFace[2][1] = oldTopFace[1][0];
+
+			newBottomFace[1][0] = oldLeftFace[0][1];
+			newBottomFace[1][1] = oldLeftFace[1][1];
+			newBottomFace[1][2] = oldLeftFace[2][1];
+
+			newRightFace[0][1] = oldBottomFace[1][2];
+			newRightFace[1][1] = oldBottomFace[1][1];
+			newRightFace[2][1] = oldBottomFace[1][0];
+
+			displayRubik();
+			break;
+		case "rotateRightMiddle":
+			newTopFace[1][0] = oldLeftFace[2][1];
+			newTopFace[1][1] = oldLeftFace[1][1];
+			newTopFace[1][2] = oldLeftFace[0][1];
+
+			newRightFace[0][1] = oldTopFace[1][0];
+			newRightFace[1][1] = oldTopFace[1][1];
+			newRightFace[2][1] = oldTopFace[1][2];
+
+			newBottomFace[1][0] = oldRightFace[2][1];
+			newBottomFace[1][1] = oldRightFace[1][1];
+			newBottomFace[1][2] = oldRightFace[0][1];
+
+			newLeftFace[0][1] = oldBottomFace[1][0];
+			newLeftFace[1][1] = oldBottomFace[1][1];
+			newLeftFace[2][1] = oldBottomFace[1][2];
 
 			displayRubik();
 			break;

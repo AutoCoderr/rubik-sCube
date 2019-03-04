@@ -18,154 +18,223 @@ for (let face=1;face<=6;face++) {
 		}
 	}
 }
+let codeSave = "";
+
+let facePos = {};
+let DOMEnable = true;
+
+getFacePos();
 
 function displayRubik() {
-	const cells = $(".cube").find("td");
-	for (let c=0;c<cells.length;c++) {
-		const color = parseInt($(cells[c]).attr("id").split("-")[0]);
-		const line = parseInt($(cells[c]).attr("id").split("-")[1]);
-		const cell = parseInt($(cells[c]).attr("id").split("-")[2]);
+	if (DOMEnable) {
+		const cells = $(".cube").find("td");
+		for (let c=0;c<cells.length;c++) {
+			const color = parseInt($(cells[c]).attr("id").split("-")[0]);
+			const line = parseInt($(cells[c]).attr("id").split("-")[1]);
+			const cell = parseInt($(cells[c]).attr("id").split("-")[2]);
 
-		$(cells[c]).removeClass($(cells[c]).attr("class"));
-		$(cells[c]).addClass(colorName[rubik[color][line][cell]]);
+			$(cells[c]).removeClass($(cells[c]).attr("class"));
+			$(cells[c]).addClass(colorName[rubik[color][line][cell]]);
+		}
 	}
 }
 
 function rotateCube(sens) {
-	const faceFront = $(".front").attr("id");
-	const faceBottom = $(".bottom").attr("id");
-	const faceBack = $(".back").attr("id");
-	const faceTop = $(".top").attr("id");
-	const faceLeft = $(".left").attr("id");
-	const faceRight = $(".right").attr("id");
+	let oldFacePos;
+
+	const faceFront = colorName[facePos.front]+"Face";
+	const faceBottom = colorName[facePos.bottom]+"Face";
+	const faceBack = colorName[facePos.back]+"Face";
+	const faceTop = colorName[facePos.top]+"Face";
+	const faceLeft = colorName[facePos.left]+"Face";
+	const faceRight = colorName[facePos.right]+"Face";
 	switch(sens) {
 		case "toTop":
-			rotateMat(getColorOfFace($(".left").attr("id")),"left");
-			rotateMat(getColorOfFace($(".right").attr("id")),"right");
+			rotateMat(facePos.left,"left");
+			rotateMat(facePos.right,"right");
 
-			rotateMat(getColorOfFace($(".back").attr("id")),"right");
-			rotateMat(getColorOfFace($(".back").attr("id")),"right");
+			rotateMat(facePos.back,"right");
+			rotateMat(facePos.back,"right");
 
-			rotateMat(getColorOfFace($(".top").attr("id")),"right");
-			rotateMat(getColorOfFace($(".top").attr("id")),"right");
+			rotateMat(facePos.top,"right");
+			rotateMat(facePos.top,"right");
+
+			oldFacePos = copyDict(facePos);
+
+			facePos.front = oldFacePos.bottom;
+			facePos.bottom = oldFacePos.back;
+			facePos.back = oldFacePos.top;
+			facePos.top = oldFacePos.front;
 
 			displayRubik();
 
-			$("#"+faceFront).removeClass("front");
-			$("#"+faceFront).addClass("top");
+			if (DOMEnable) {
+				$("#"+faceFront).removeClass("front");
+				$("#"+faceFront).addClass("top");
 
-			$("#"+faceTop).removeClass("top");
-			$("#"+faceTop).addClass("back");
+				$("#"+faceTop).removeClass("top");
+				$("#"+faceTop).addClass("back");
 
-			$("#"+faceBack).removeClass("back");
-			$("#"+faceBack).addClass("bottom");
+				$("#"+faceBack).removeClass("back");
+				$("#"+faceBack).addClass("bottom");
 
-			$("#"+faceBottom).removeClass("bottom");
-			$("#"+faceBottom).addClass("front");
+				$("#"+faceBottom).removeClass("bottom");
+				$("#"+faceBottom).addClass("front");
+			}
 			break;
+
 		case "toBottom":
-			rotateMat(getColorOfFace($(".left").attr("id")),"right");
-			rotateMat(getColorOfFace($(".right").attr("id")),"left");
+			rotateMat(facePos.left,"right");
+			rotateMat(facePos.right,"left");
 
-			rotateMat(getColorOfFace($(".back").attr("id")),"right");
-			rotateMat(getColorOfFace($(".back").attr("id")),"right");
+			rotateMat(facePos.back,"right");
+			rotateMat(facePos.back,"right");
 
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"right");
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"right");
+			rotateMat(facePos.bottom,"right");
+			rotateMat(facePos.bottom,"right");
+
+			oldFacePos = copyDict(facePos);
+
+			facePos.front = oldFacePos.top;
+			facePos.top = oldFacePos.back;
+			facePos.back = oldFacePos.bottom;
+			facePos.bottom = oldFacePos.front;
 
 			displayRubik();
 
-			$("#"+faceFront).removeClass("front");
-			$("#"+faceFront).addClass("bottom");
+			if (DOMEnable) {
+				$("#"+faceFront).removeClass("front");
+				$("#"+faceFront).addClass("bottom");
 
-			$("#"+faceBottom).removeClass("bottom");
-			$("#"+faceBottom).addClass("back");
+				$("#"+faceBottom).removeClass("bottom");
+				$("#"+faceBottom).addClass("back");
 
-			$("#"+faceBack).removeClass("back");
-			$("#"+faceBack).addClass("top");
+				$("#"+faceBack).removeClass("back");
+				$("#"+faceBack).addClass("top");
 
-			$("#"+faceTop).removeClass("top");
-			$("#"+faceTop).addClass("front");
+				$("#"+faceTop).removeClass("top");
+				$("#"+faceTop).addClass("front");
+			}
 			break;
 		case "toRight":
-			rotateMat(getColorOfFace($(".top").attr("id")),"left");
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"right");
+			rotateMat(facePos.top,"left");
+			rotateMat(facePos.bottom,"right");
+
+			oldFacePos = copyDict(facePos);
+
+			facePos.front = oldFacePos.left;
+			facePos.left = oldFacePos.back;
+			facePos.back = oldFacePos.right;
+			facePos.right = oldFacePos.front;
 
 			displayRubik();
 
-			$("#"+faceFront).removeClass("front");
-			$("#"+faceFront).addClass("right");
+			if (DOMEnable) {
+				$("#"+faceFront).removeClass("front");
+				$("#"+faceFront).addClass("right");
 
-			$("#"+faceRight).removeClass("right");
-			$("#"+faceRight).addClass("back");
+				$("#"+faceRight).removeClass("right");
+				$("#"+faceRight).addClass("back");
 
-			$("#"+faceBack).removeClass("back");
-			$("#"+faceBack).addClass("left");
+				$("#"+faceBack).removeClass("back");
+				$("#"+faceBack).addClass("left");
 
-			$("#"+faceLeft).removeClass("left");
-			$("#"+faceLeft).addClass("front");
+				$("#"+faceLeft).removeClass("left");
+				$("#"+faceLeft).addClass("front");
+			}
 			break;
 		case "toLeft":
-			rotateMat(getColorOfFace($(".top").attr("id")),"right");
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"left");
+			rotateMat(facePos.top,"right");
+			rotateMat(facePos.bottom,"left");
+
+			oldFacePos = copyDict(facePos);
+
+			facePos.front = oldFacePos.right;
+			facePos.right = oldFacePos.back;
+			facePos.back = oldFacePos.left;
+			facePos.left = oldFacePos.front;
 
 			displayRubik();
 
-			$("#"+faceFront).removeClass("front");
-			$("#"+faceFront).addClass("left");
+			if (DOMEnable) {
+				$("#"+faceFront).removeClass("front");
+				$("#"+faceFront).addClass("left");
 
-			$("#"+faceLeft).removeClass("left");
-			$("#"+faceLeft).addClass("back");
+				$("#"+faceLeft).removeClass("left");
+				$("#"+faceLeft).addClass("back");
 
-			$("#"+faceBack).removeClass("back");
-			$("#"+faceBack).addClass("right");
+				$("#"+faceBack).removeClass("back");
+				$("#"+faceBack).addClass("right");
 
-			$("#"+faceRight).removeClass("right");
-			$("#"+faceRight).addClass("front");
+				$("#"+faceRight).removeClass("right");
+				$("#"+faceRight).addClass("front");
+			}
 			break;
 		case "rotateLeft":
-			rotateMat(getColorOfFace($(".front").attr("id")),"left");
-			rotateMat(getColorOfFace($(".back").attr("id")),"right");
-			rotateMat(getColorOfFace($(".top").attr("id")),"left");
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"left");
-			rotateMat(getColorOfFace($(".left").attr("id")),"left");
-			rotateMat(getColorOfFace($(".right").attr("id")),"left");
+			rotateMat(facePos.front,"left");
+			rotateMat(facePos.back,"right");
+
+			rotateMat(facePos.top,"left");
+			rotateMat(facePos.bottom,"left");
+
+			rotateMat(facePos.left,"left");
+			rotateMat(facePos.right,"left");
+
+			oldFacePos = copyDict(facePos);
+
+			facePos.top = oldFacePos.right;
+			facePos.right = oldFacePos.bottom;
+			facePos.bottom = oldFacePos.left;
+			facePos.left = oldFacePos.top;
 
 			displayRubik();
 
-			$("#"+faceTop).removeClass("top");
-			$("#"+faceTop).addClass("left");
+			if (DOMEnable) {
+				$("#"+faceTop).removeClass("top");
+				$("#"+faceTop).addClass("left");
 
-			$("#"+faceLeft).removeClass("left");
-			$("#"+faceLeft).addClass("bottom");
+				$("#"+faceLeft).removeClass("left");
+				$("#"+faceLeft).addClass("bottom");
 
-			$("#"+faceBottom).removeClass("bottom");
-			$("#"+faceBottom).addClass("right");
+				$("#"+faceBottom).removeClass("bottom");
+				$("#"+faceBottom).addClass("right");
 
-			$("#"+faceRight).removeClass("right");
-			$("#"+faceRight).addClass("top");
+				$("#"+faceRight).removeClass("right");
+				$("#"+faceRight).addClass("top");
+			}
 			break;
 		case "rotateRight":
-			rotateMat(getColorOfFace($(".front").attr("id")),"right");
-			rotateMat(getColorOfFace($(".back").attr("id")),"left");
-			rotateMat(getColorOfFace($(".top").attr("id")),"right");
-			rotateMat(getColorOfFace($(".bottom").attr("id")),"right");
-			rotateMat(getColorOfFace($(".left").attr("id")),"right");
-			rotateMat(getColorOfFace($(".right").attr("id")),"right");
+			rotateMat(facePos.front,"right");
+			rotateMat(facePos.back,"left");
+
+			rotateMat(facePos.top,"right");
+			rotateMat(facePos.bottom,"right");
+
+			rotateMat(facePos.left,"right");
+			rotateMat(facePos.right,"right");
+
+			oldFacePos = copyDict(facePos);
+
+			facePos.top = oldFacePos.left;
+			facePos.left = oldFacePos.bottom;
+			facePos.bottom = oldFacePos.right;
+			facePos.right = oldFacePos.top;
 
 			displayRubik();
 
-			$("#"+faceTop).removeClass("top");
-			$("#"+faceTop).addClass("right");
+			if (DOMEnable) {
+				$("#"+faceTop).removeClass("top");
+				$("#"+faceTop).addClass("right");
 
-			$("#"+faceRight).removeClass("right");
-			$("#"+faceRight).addClass("bottom");
+				$("#"+faceRight).removeClass("right");
+				$("#"+faceRight).addClass("bottom");
 
-			$("#"+faceBottom).removeClass("bottom");
-			$("#"+faceBottom).addClass("left");
+				$("#"+faceBottom).removeClass("bottom");
+				$("#"+faceBottom).addClass("left");
 
-			$("#"+faceLeft).removeClass("left");
-			$("#"+faceLeft).addClass("top");
+				$("#"+faceLeft).removeClass("left");
+				$("#"+faceLeft).addClass("top");
+			}
 
 			break;
 	}
@@ -331,6 +400,7 @@ function getColorOfFace(id) {
 
 function convertCode(code) {
 	console.log("mouv code : \""+code+"\"");
+	codeSave += " "+code;
 	let converteds = [];
 	for (let i=0;i<code.length;i++) {
 		if (code[i] == "F") {
@@ -455,7 +525,7 @@ function convertCode(code) {
 				converteds.push({type: "mouv", val: "middleToRight"});
 				converteds.push({type: "mouv", val: "bottomToRight"});
 			}
-		} else if (code[i] == "X") {
+		} else if (code[i] == "X" | code[i] == "x") {
 			if (i == code.length-1) {
 				converteds.push({type: "rotate", val: "toTop"});
 			} else if (code[i+1] == "'") {
@@ -468,7 +538,7 @@ function convertCode(code) {
 			} else {
 				converteds.push({type: "rotate", val: "toTop"});
 			}
-		} else if (code[i] == "Y") {
+		} else if (code[i] == "Y" | code[i] == "y") {
 			if (i == code.length-1) {
 				converteds.push({type: "rotate", val: "toLeft"});
 			} else if (code[i+1] == "'") {
@@ -481,7 +551,7 @@ function convertCode(code) {
 			} else {
 				converteds.push({type: "rotate", val: "toLeft"});
 			}
-		} else if (code[i] == "Z") {
+		} else if (code[i] == "Z" | code[i] == "z") {
 			if (i == code.length-1) {
 				converteds.push({type: "rotate", val: "rotateRight"});
 			} else if (code[i+1] == "'") {
@@ -493,6 +563,189 @@ function convertCode(code) {
 				i += 1;
 			} else {
 				converteds.push({type: "rotate", val: "rotateRight"});
+			}
+		} else if (code[i] == "M") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "middleToDown"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "middleToUp"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "middleToDown"});
+				converteds.push({type: "mouv", val: "middleToDown"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "middleToDown"});
+			}
+		} else if (code[i] == "m") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "leftToDown"});
+				converteds.push({type: "mouv", val: "rightToDown"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "leftToUp"});
+				converteds.push({type: "mouv", val: "rightToUp"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "leftToDown"});
+				converteds.push({type: "mouv", val: "rightToDown"});
+				converteds.push({type: "mouv", val: "leftToDown"});
+				converteds.push({type: "mouv", val: "rightToDown"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "leftToDown"});
+				converteds.push({type: "mouv", val: "rightToDown"});
+			}
+		} else if (code[i] == "E") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "middleToRight"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "middleToLeft"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "middleToRight"});
+				converteds.push({type: "mouv", val: "middleToRight"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "middleToRight"});
+			}
+		} else if (code[i] == "e") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "topToRight"});
+				converteds.push({type: "mouv", val: "bottomToRight"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "topToLeft"});
+				converteds.push({type: "mouv", val: "bottomToLeft"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "topToRight"});
+				converteds.push({type: "mouv", val: "bottomToRight"});
+				converteds.push({type: "mouv", val: "topToRight"});
+				converteds.push({type: "mouv", val: "bottomToRight"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "topToRight"});
+				converteds.push({type: "mouv", val: "bottomToRight"});
+			}
+		} else if (code[i] == "S") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "rotateLeftMiddle"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+			}
+		} else if (code[i] == "s") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightBack"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "rotateLeft"});
+				converteds.push({type: "mouv", val: "rotateLeftBack"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightBack"});
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightBack"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightBack"});
+			}
+		} else if (code[i] == "u") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "topToLeft"});
+				converteds.push({type: "mouv", val: "middleToLeft"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "topToRight"});
+				converteds.push({type: "mouv", val: "middleToRight"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "topToLeft"});
+				converteds.push({type: "mouv", val: "middleToLeft"});
+				converteds.push({type: "mouv", val: "topToLeft"});
+				converteds.push({type: "mouv", val: "middleToLeft"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "topToLeft"});
+				converteds.push({type: "mouv", val: "middleToLeft"});
+			}
+		} else if (code[i] == "r") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "middleToUp"});
+				converteds.push({type: "mouv", val: "rightToUp"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "middleToDown"});
+				converteds.push({type: "mouv", val: "rightToDown"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "middleToUp"});
+				converteds.push({type: "mouv", val: "rightToUp"});
+				converteds.push({type: "mouv", val: "middleToUp"});
+				converteds.push({type: "mouv", val: "rightToUp"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "middleToUp"});
+				converteds.push({type: "mouv", val: "rightToUp"});
+			}
+		} else if (code[i] == "f") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "rotateLeft"});
+				converteds.push({type: "mouv", val: "rotateLeftMiddle"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "rotateRight"});
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+			}
+		} else if (code[i] == "l") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "middleToDown"});
+				converteds.push({type: "mouv", val: "leftToDown"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "middleToUp"});
+				converteds.push({type: "mouv", val: "leftToUp"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "middleToDown"});
+				converteds.push({type: "mouv", val: "leftToDown"});
+				converteds.push({type: "mouv", val: "middleToDown"});
+				converteds.push({type: "mouv", val: "leftToDown"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "middleToDown"});
+				converteds.push({type: "mouv", val: "leftToDown"});
+			}
+		} else if (code[i] == "b") {
+			if (i == code.length-1) {
+				converteds.push({type: "mouv", val: "rotateLeftBack"});
+				converteds.push({type: "mouv", val: "rotateLeftMiddle"});
+			} else if (code[i+1] == "'") {
+				converteds.push({type: "mouv", val: "rotateRightBack"});
+				converteds.push({type: "mouv", val: "rotateRightMiddle"});
+				i += 1;
+			} else if (code[i+1] == "2") {
+				converteds.push({type: "mouv", val: "rotateLeftBack"});
+				converteds.push({type: "mouv", val: "rotateLeftMiddle"});
+				converteds.push({type: "mouv", val: "rotateLeftBack"});
+				converteds.push({type: "mouv", val: "rotateLeftMiddle"});
+				i += 1;
+			} else {
+				converteds.push({type: "mouv", val: "rotateLeftBack"});
+				converteds.push({type: "mouv", val: "rotateLeftMiddle"});
 			}
 		}
 	}
@@ -602,4 +855,57 @@ function leftColor(color, bottom) {
 
 function rightColor(color, bottom) {
 	return opposedColor(leftColor(color, bottom));
+}
+
+function getFacePos() {
+	facePos.left = getColorOfFace($(".left").attr("id"));
+	facePos.right = getColorOfFace($(".right").attr("id"));
+
+	facePos.back = getColorOfFace($(".back").attr("id"));
+	facePos.front = getColorOfFace($(".front").attr("id"));
+
+	facePos.top = getColorOfFace($(".top").attr("id"));
+	facePos.bottom = getColorOfFace($(".bottom").attr("id"));
+}
+
+function setRubikFromDOM() {
+	const cells = $(".cube").find("td");
+	for (let c=0;c<cells.length;c++) {
+		rubik[parseInt($(cells[c]).attr("id").split("-")[0])][parseInt($(cells[c]).attr("id").split("-")[1])][parseInt($(cells[c]).attr("id").split("-")[2])] = getColorOfFace($(cells[c]).attr("class"));
+	}
+	getFacePos();
+}
+
+function setDOMFromMatrice() {
+	const cells = $(".cube").find("td");
+	for (let c=0;c<cells.length;c++) {
+		$(cells[c]).removeClass($(cells[c]).attr("class"));
+		$(cells[c]).addClass(colorName[rubik[parseInt($(cells[c]).attr("id").split("-")[0])][parseInt($(cells[c]).attr("id").split("-")[1])][parseInt($(cells[c]).attr("id").split("-")[2])]]);
+	}
+	$("#"+colorName[facePos.top]+"Face").removeClass($("#"+colorName[facePos.top]+"Face").attr("class"));
+	$("#"+colorName[facePos.top]+"Face").addClass("cube-face top");
+	$("#"+colorName[facePos.bottom]+"Face").removeClass($("#"+colorName[facePos.bottom]+"Face").attr("class"));
+	$("#"+colorName[facePos.bottom]+"Face").addClass("cube-face bottom");
+
+	$("#"+colorName[facePos.front]+"Face").removeClass($("#"+colorName[facePos.front]+"Face").attr("class"));
+	$("#"+colorName[facePos.front]+"Face").addClass("cube-face front");
+	$("#"+colorName[facePos.back]+"Face").removeClass($("#"+colorName[facePos.back]+"Face").attr("class"));
+	$("#"+colorName[facePos.back]+"Face").addClass("cube-face back");
+
+	$("#"+colorName[facePos.left]+"Face").removeClass($("#"+colorName[facePos.left]+"Face").attr("class"));
+	$("#"+colorName[facePos.left]+"Face").addClass("cube-face left");
+	$("#"+colorName[facePos.right]+"Face").removeClass($("#"+colorName[facePos.right]+"Face").attr("class"));
+	$("#"+colorName[facePos.right]+"Face").addClass("cube-face right");
+}
+
+function copyDict(dict) {
+	let newDict = {};
+	for (let key in dict) {
+		if (typeof(dict[key]) == "object") {
+			newDict[key] = copyDict(dict[key])
+		} else {
+			newDict[key] = dict[key];
+		}
+	}
+	return newDict;
 }

@@ -1,17 +1,27 @@
 function CreateCroix() {
 	this.callback = null;
+	this.nb = 0;
 
 	this.createCroix = (callback) => {
 		if (typeof(callback) == "function") {
 			this.callback = callback;
 		}
-		const color = rubik[getColorOfFace($(".bottom").attr("id"))][1][1];
+		const color = rubik[facePos.bottom][1][1];
 		this.verifAreteAtBottom(color);
 	}
 
 	this.verifAreteAtBottom = (color) => {
-		console.log("verifAreteAtBottom");
-		const bottomFace = rubik[getColorOfFace($(".bottom").attr("id"))];
+		const bottomFace = rubik[facePos.bottom];
+
+		if (this.nb >= 20) {
+			if (!DOMEnable) {
+				setRubikFromDOM();
+				DOMEnable = true;
+			}
+			alert("Echec de résolution du rubik's cube");
+			return;
+		}
+		this.nb += 1;
 
 		if (this.croixCompleted(color)) {
 			this.orienteCroix();
@@ -25,13 +35,14 @@ function CreateCroix() {
 	}
 
 	this.placeArete = (color) => {
-		console.log("placeArete");
-		const topFace = rubik[getColorOfFace($(".top").attr("id"))];
-		const rightFace = rubik[getColorOfFace($(".right").attr("id"))];
-		const bottomFace = rubik[getColorOfFace($(".bottom").attr("id"))];
-		const frontFace = rubik[getColorOfFace($(".front").attr("id"))];
-		const leftFace = rubik[getColorOfFace($(".left").attr("id"))];
-		const backFace = rubik[getColorOfFace($(".back").attr("id"))];
+
+		const frontFace = rubik[facePos.front];
+		const bottomFace = rubik[facePos.bottom];
+		const topFace = rubik[facePos.top];
+		const leftFace = rubik[facePos.left];
+		const rightFace = rubik[facePos.right];
+		const backFace = rubik[facePos.back];
+
 		if (topFace[2][1] == color) {
 			const colorAreteAtFront = frontFace[0][1];
 			if ((rightColor(colorAreteAtFront,color) == leftFace[2][1] & bottomFace[1][0] == color) | 
@@ -142,7 +153,7 @@ function CreateCroix() {
 	}
 
 	this.croixCompleted = (color) => {
-		const bottomFace = rubik[getColorOfFace($(".bottom").attr("id"))];
+		const bottomFace = rubik[facePos.bottom];
 		if (bottomFace[0][1] != color | bottomFace[1][0] != color | bottomFace[1][2] != color | bottomFace[2][1] != color) {
 			return false;
 		}
@@ -163,10 +174,10 @@ function CreateCroix() {
 	}
 
 	this.faceOriented = () => {
-		const leftFace = rubik[getColorOfFace($(".left").attr("id"))];
-		const rightFace = rubik[getColorOfFace($(".right").attr("id"))];
-		const frontFace = rubik[getColorOfFace($(".front").attr("id"))];
-		const backFace = rubik[getColorOfFace($(".back").attr("id"))];
+		const leftFace = rubik[facePos.left];
+		const rightFace = rubik[facePos.right];
+		const frontFace = rubik[facePos.front];
+		const backFace = rubik[facePos.back];
 		if (frontFace[2][1] != frontFace[1][1] |
 			backFace[2][1] != backFace[1][1] | 
 			leftFace[2][1] != leftFace[1][1] |
